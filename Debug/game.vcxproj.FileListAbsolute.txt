@@ -1,0 +1,2 @@
+D:\Program\homework\Programming\game\Debug\game.exe
+D:\Program\homework\Programming\game\Debug\game.pdb

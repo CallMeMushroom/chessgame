@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>D:\Program\homework\Programming\game\</FILEPATH>
+      <FILENAME>game.cpp</FILENAME>
+      <LINE>156</LINE>
+      <COLUMN>10</COLUMN>
+    </SFA>
+    <DEFECTCODE>6031</DEFECTCODE>
+    <DESCRIPTION>返回值被忽略: “_getch”。</DESCRIPTION>
+    <FUNCTION>main</FUNCTION>
+    <DECORATED>main</DECORATED>
+    <FUNCLINE>135</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
