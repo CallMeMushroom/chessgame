@@ -161,7 +161,11 @@
     <ClInclude Include="paint.h" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="C:\Users\DELL\Downloads\Music\Freesound - -Placing chess pieces on chess board.wav- by BiancaBothaPure.mp3" />
+    <Media Include="SE\CAPTURE.WAV" />
+    <Media Include="SE\CHECK.WAV" />
+    <Media Include="SE\CLICK.WAV" />
+    <Media Include="SE\ILLEGAL.WAV" />
+    <Media Include="SE\MOVE.WAV" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

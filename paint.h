@@ -9,6 +9,6 @@ void drawboard(const int seam = 4, const int dest = 12);
 
 void drawpiece(int x, int y, COLORREF color, const wchar_t* symbol);
 
-void drawpiece(int xPos, int yPos, char symbolchar);
+void drawpiece(int x, int y, char symbolchar);
 
 void drawpiece(Piece piece);

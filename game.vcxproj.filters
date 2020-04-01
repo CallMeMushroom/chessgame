@@ -49,7 +49,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="C:\Users\DELL\Downloads\Music\Freesound - -Placing chess pieces on chess board.wav- by BiancaBothaPure.mp3">
+    <Media Include="SE\CAPTURE.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\CHECK.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\CLICK.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\ILLEGAL.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\MOVE.WAV">
       <Filter>资源文件</Filter>
     </Media>
   </ItemGroup>

@@ -1,2 +1,4 @@
 D:\Program\homework\Programming\game\Debug\game.exe
 D:\Program\homework\Programming\game\Debug\game.pdb
+D:\Program\chessgame\Debug\game.exe
+D:\Program\chessgame\Debug\game.pdb

@@ -25,11 +25,12 @@ void Piece::clear() {
     this->legalmoves.clear();
 }
 
+// whether the given pos is in reach of this piece of this board
 bool Piece::inreach(BoardStatus board, int xPos, int yPos) {
     int xDist = xPos - this->xPos, yDist = yPos - this->yPos;
     bool crossriver = ((xPos / 6) == !!std::islower(this->name));
     int step = (xDist ^ yDist) > 0 ? 1 : -1;
-    std::set<char> path;
+    std::vector<char> path;
 
     switch (std::toupper(this->name)) {
     case 'G':
@@ -67,15 +68,16 @@ bool Piece::inreach(BoardStatus board, int xPos, int yPos) {
 
         if (xDist) {
             for (int row = this->xPos + step; row != xPos + step; row += step)
-                path.insert(board.chrboard[row][yPos]);
+                if (board.chrboard[row][yPos] != ' ')
+                    path.push_back(board.chrboard[row][yPos]);
         }
         else if (yDist) {
             for (int clm = this->yPos + step; clm != yPos + step; clm += step)
-                path.insert(board.chrboard[xPos][clm]);
+                if (board.chrboard[xPos][clm] != ' ')
+                    path.push_back(board.chrboard[xPos][clm]);
         }
-        path.insert(' ');
-        if (path.size() != 1 and path.size() != 3) return false;
-        return (path.size() == 1) == (board.chrboard[xPos][yPos] == ' ');
+        if (path.size() != 0 and path.size() != 2) return false;
+        return (path.size() == 0) == (board.chrboard[xPos][yPos] == ' ');
         // comment: rule code for Rook and Canon is super ugly, looking forward to simplification.
 
     case 'P':

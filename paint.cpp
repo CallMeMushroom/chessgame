@@ -108,30 +108,30 @@ void drawpiece(int x, int y, COLORREF color, const wchar_t* symbol)
 }
 
 // draw a chess piece whose at board grid (xPos, yPos)
-void drawpiece(int xPos, int yPos, char symbolchar)
+void drawpiece(int x, int y, char symbolchar)
 {
     COLORREF color = std::islower(symbolchar) ? BLACKCOLOR : REDCOLOR;
 
-    if (symbolchar == 'M') drawpiece(P(yPos), P(xPos), LIGHTBLUE, _MUSHROOM);
+    if (symbolchar == 'M') drawpiece(y, x, LIGHTBLUE, _MUSHROOM);
 
-    else if (symbolchar == 'G') drawpiece(P(yPos), P(xPos), color, _Governer);
-    else if (symbolchar == 'A') drawpiece(P(yPos), P(xPos), color, _Advisor);
-    else if (symbolchar == 'B') drawpiece(P(yPos), P(xPos), color, _Bishop);
-    else if (symbolchar == 'H') drawpiece(P(yPos), P(xPos), color, _Horse);
-    else if (symbolchar == 'R') drawpiece(P(yPos), P(xPos), color, _Rook);
-    else if (symbolchar == 'C') drawpiece(P(yPos), P(xPos), color, _Cannon);
-    else if (symbolchar == 'P') drawpiece(P(yPos), P(xPos), color, _Pawn);
-    else if (symbolchar == 'g') drawpiece(P(yPos), P(xPos), color, _general);
-    else if (symbolchar == 'a') drawpiece(P(yPos), P(xPos), color, _advisor);
-    else if (symbolchar == 'b') drawpiece(P(yPos), P(xPos), color, _bishop);
-    else if (symbolchar == 'h') drawpiece(P(yPos), P(xPos), color, _horse);
-    else if (symbolchar == 'r') drawpiece(P(yPos), P(xPos), color, _rook);
-    else if (symbolchar == 'c') drawpiece(P(yPos), P(xPos), color, _catapult);
-    else if (symbolchar == 'p') drawpiece(P(yPos), P(xPos), color, _pawn);
+    else if (symbolchar == 'G') drawpiece(y, x, color, _Governer);
+    else if (symbolchar == 'A') drawpiece(y, x, color, _Advisor);
+    else if (symbolchar == 'B') drawpiece(y, x, color, _Bishop);
+    else if (symbolchar == 'H') drawpiece(y, x, color, _Horse);
+    else if (symbolchar == 'R') drawpiece(y, x, color, _Rook);
+    else if (symbolchar == 'C') drawpiece(y, x, color, _Cannon);
+    else if (symbolchar == 'P') drawpiece(y, x, color, _Pawn);
+    else if (symbolchar == 'g') drawpiece(y, x, color, _general);
+    else if (symbolchar == 'a') drawpiece(y, x, color, _advisor);
+    else if (symbolchar == 'b') drawpiece(y, x, color, _bishop);
+    else if (symbolchar == 'h') drawpiece(y, x, color, _horse);
+    else if (symbolchar == 'r') drawpiece(y, x, color, _rook);
+    else if (symbolchar == 'c') drawpiece(y, x, color, _catapult);
+    else if (symbolchar == 'p') drawpiece(y, x, color, _pawn);
 }
 
 // draw THE piece
 void drawpiece(Piece piece)
 {
-    drawpiece(piece.xPos, piece.yPos, piece.name);
+    drawpiece(P(piece.xPos), P(piece.yPos), piece.name);
 }

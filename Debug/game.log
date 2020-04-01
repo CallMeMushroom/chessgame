@@ -1,4 +1,14 @@
-﻿  game.cpp
-D:\Program\homework\Programming\game\game.cpp(123,26): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-D:\Program\homework\Programming\game\game.cpp(124,26): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-  game.vcxproj -> D:\Program\homework\Programming\game\Debug\game.exe
+﻿  BoardStatus.cpp
+  Piece.cpp
+  game.cpp
+D:\Program\chessgame\game.cpp(211,26): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\Program\chessgame\game.cpp(212,26): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+D:\Program\chessgame\game.cpp(300,64): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\Program\chessgame\game.cpp(300,49): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  paint.cpp
+D:\Program\chessgame\paint.cpp(96,38): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\Program\chessgame\paint.cpp(101,28): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  util.cpp
+  正在生成代码...
+D:\Program\chessgame\Piece.cpp(86): warning C4715: “Piece::inreach”: 不是所有的控件路径都返回值
+  game.vcxproj -> D:\Program\chessgame\Debug\game.exe
