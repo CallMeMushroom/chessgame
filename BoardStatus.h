@@ -21,16 +21,19 @@ public:
     ".RHBAGABHR"
     };
 
-    int numboard[11][10];                                                   // remember that 5 and 28 are governer and general
+    int numboard[11][10];
+
+    int kingid[2] = { 0, 0 };
 
     std::set<std::pair<int, int>> choosings;                                // store one or two "choosing" piece(s)
 
-    int numquery(std::pair<int, int> pos);
+    int getid(std::pair<int, int> pos);
 
-    char chrquery(std::pair<int, int> pos);
+    char getsymb(std::pair<int, int> pos);
 
     void modify(std::pair<int, int> pos, char symbol, int id);
 
     void modify(std::pair<int, int> pos, int id);
 
+    bool importfrom(std::string str);
 };

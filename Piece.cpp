@@ -93,7 +93,7 @@ bool Piece::inreach(BoardStatus board, std::pair<int, int> pos) {
 void Piece::maintain(BoardStatus board) {
     this->legalmoves.clear();
     for (auto intersection : intersections) {
-        if (!isfriend(this->name, board.chrquery(intersection)) and this->inreach(board, intersection))
+        if (!isfriend(this->name, board.getsymb(intersection)) and this->inreach(board, intersection))
             this->legalmoves.insert(intersection);
     }
 }
@@ -108,8 +108,8 @@ Piece::Piece() {
 Piece::Piece(BoardStatus board, std::pair<int, int> intersection) {
     this->xPos = intersection.first;
     this->yPos = intersection.second;
-    this->name = board.chrquery(intersection);
-    this->id = board.numquery(intersection);
+    this->name = board.getsymb(intersection);
+    this->id = board.getid(intersection);
     this->region = !!std::islower(this->name);
     this->legalmoves.clear();
     this->maintain(board);

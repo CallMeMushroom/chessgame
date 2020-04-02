@@ -12,6 +12,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <algorithm>
 #include <utility>
 #include <Windows.h>
 #include <mmsystem.h>
@@ -62,12 +63,13 @@ constexpr int GridWeight = (int)(GridSize / 50);
 #define TEXTCOLOR               BLACK
 #define FOCUSCOLOR              BLUE
 
-#define MUTE                    true
+#define MUTE                    false
 #define CLICK_SOUND             1
 #define MOVE_SOUND              2
 #define CAPTURE_SOUND           3
 #define CHECK_SOUND             4
 #define ILLEGAL_SOUND           5
+#define END_GAME_SOUND          6
 
 #define ANIMATION               true
 #define ANIME_FREQ_HZ           180

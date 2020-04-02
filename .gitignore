@@ -1,0 +1,8 @@
+
+*.pdb
+*.idb
+*.obj
+*.ilk
+*.ipch
+*.db
+.vs/game/v16/.suo

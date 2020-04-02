@@ -30,6 +30,9 @@
     <ClCompile Include="BoardStatus.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="clipboard.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -47,21 +50,33 @@
     <ClInclude Include="paint.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="clipboard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="SE\CAPTURE.WAV">
+    <Media Include="SE\CAPTURE.wav">
       <Filter>资源文件</Filter>
     </Media>
-    <Media Include="SE\CHECK.WAV">
+    <Media Include="SE\CHECK.wav">
       <Filter>资源文件</Filter>
     </Media>
-    <Media Include="SE\CLICK.WAV">
+    <Media Include="SE\CHECK_.WAV">
       <Filter>资源文件</Filter>
     </Media>
-    <Media Include="SE\ILLEGAL.WAV">
+    <Media Include="SE\CLICK.wav">
       <Filter>资源文件</Filter>
     </Media>
-    <Media Include="SE\MOVE.WAV">
+    <Media Include="SE\ILLEGAL.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\ILLEGAL_.WAV">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\MOVE.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="SE\END_GAME.WAV">
       <Filter>资源文件</Filter>
     </Media>
   </ItemGroup>

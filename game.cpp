@@ -3,6 +3,7 @@
 #include "BoardStatus.h"
 #include "util.h"
 #include "paint.h"
+#include "clipboard.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -13,7 +14,8 @@ std::set<std::pair<int, int>> palace;
 BoardStatus board;
 std::map<int, Piece> pieces;
 
-std::vector<std::pair<BoardStatus, std::map<int, Piece>>> history;
+typedef std::pair<BoardStatus, std::map<int, Piece>> phase;
+std::vector<phase> history;
 
 // show board and all chess pieces and chosen intersection(s)
 void render() {
@@ -37,8 +39,31 @@ void render() {
     for (auto map : pieces) drawpiece(map.second);
 }
 
-// everything you shall do before run anything
+// everything you shall do before run a new game
 void init() {
+    pieces.clear();
+    board.choosings.clear();
+    board.turnflag = REDTURN;
+
+    int id = 1;
+    for (auto intersection : intersections) {                               // initialize pieces
+        char name = board.getsymb(intersection);
+        if (name == ' ') continue;
+        if (std::toupper(name) == 'G')
+            board.kingid[!!std::islower(name)] = id;
+        board.modify(intersection, id++);
+        Piece piece(board, intersection);
+        //piece.maintain(board);
+        pieces[piece.id] = piece;
+    }
+    pieces.erase(0);
+
+    history.clear();
+    history.push_back(std::make_pair(board, pieces));
+}
+
+// everything you shall do before run anything
+void global_init() {
     gettextstyle(&chessfont);                                               // initialize chessfont
     chessfont.lfHeight = SymbolSize;
     chessfont.lfWeight = FW_BOLD;
@@ -52,21 +77,9 @@ void init() {
     for (int row = 1; row <= 10; row++)                                     // initialize intersections
         for (int column = 1; column <= 9; column++)
             intersections.insert(std::make_pair(row, column));
-
-    int id = 1;
-    for (auto intersection : intersections) {                               // initialize pieces
-        if (board.chrquery(intersection) == ' ') continue;
-        board.modify(intersection, id++);
-        Piece piece(board, intersection);
-        //piece.maintain(board);
-        pieces[piece.id] = piece;
-    }
-    pieces.erase(0);
-
-    history.clear();
-    history.push_back(std::make_pair(board, pieces));
 }
 
+phase raw;
 int main()
 {
     assert(WindowWidth >= P(10) and WindowHeight >= P(11));
@@ -74,6 +87,8 @@ int main()
     setbkcolor(BKGCOLOR);
     BeginBatchDraw();
     cleardevice();
+    global_init();
+
     init();
 
     MOUSEMSG mouse;
@@ -82,6 +97,8 @@ int main()
     int sound = 0;
     Piece hold;                                                             // the chess you are holding (if you are holding one)
     auto save = history;
+    raw = history[0];
+    auto start = history.begin();
 
     while (true) {
         if (shall_render) {
@@ -96,13 +113,13 @@ int main()
             for (auto map : pieces) {
                 if (!checkmate) break;
                 Piece your_piece = map.second;
-                if (your_piece.region == board.turnflag)                        // no matter which piece it is...
-                    for (auto your_move : your_piece.legalmoves) {              // no matter what move it operates...
+                if (your_piece.region == board.turnflag)                    // no matter which piece it is...
+                    for (auto your_move : your_piece.legalmoves) {          // no matter what move it operates...
                         BoardStatus boardcopy = board;
                         auto piecescopy = pieces;
 
-                        if (boardcopy.chrquery(your_move) != ' ')
-                            piecescopy.erase(boardcopy.numquery(your_move));
+                        if (boardcopy.getsymb(your_move) != ' ')
+                            piecescopy.erase(boardcopy.getid(your_move));
                         piecescopy[your_piece.id].setpos(your_move);
 
                         boardcopy.modify(your_piece.getpos(), ' ', 0);
@@ -112,17 +129,16 @@ int main()
                         for (auto map_ : piecescopy) {
                             if (!is_legal) break;
                             Piece enemy_piece = map_.second;
-                            if (enemy_piece.region != boardcopy.turnflag) {         // there's always an enemy ...
+                            if (enemy_piece.region != boardcopy.turnflag) {     // there's always an enemy ...
                                 enemy_piece.maintain(boardcopy);
-                                for (auto enemy_move : enemy_piece.legalmoves)      // who's challenging your king.
-                                    if (enemy_move == piecescopy[boardcopy.turnflag ? 5 : 28].getpos()) {
+                                for (auto enemy_move : enemy_piece.legalmoves)  // who's challenging your king.
+                                    if (enemy_move == piecescopy[boardcopy.kingid[boardcopy.turnflag]].getpos()) {
                                         is_legal = false;
                                         break;
                                     }
                             }
                         }
                         if (is_legal) {
-                            std::cout << your_piece.name << your_move.first << your_move.second << std::endl;
                             checkmate = false;
                             break;
                         }
@@ -130,7 +146,9 @@ int main()
             }
             if (checkmate) {
                 std::cout << (board.turnflag ? "RED" : "BLACK") << " WINS" << std::endl;
-                break;
+                pieces[board.kingid[board.turnflag]].name = 'M';
+                sound = END_GAME_SOUND;
+                shall_render = true;
             }
             shall_judge = false;
             std::cout << "Judged." << std::endl;
@@ -151,6 +169,8 @@ int main()
                 mciSendString(_T("open \".\\SE\\CHECK.WAV\" type mpegvideo alias sound"), NULL, 0, NULL);
             case ILLEGAL_SOUND:
                 mciSendString(_T("open \".\\SE\\ILLEGAL.WAV\" type mpegvideo alias sound"), NULL, 0, NULL);
+            case END_GAME_SOUND:
+                mciSendString(_T("open \".\\SE\\END_GAME.WAV\" type mpegvideo alias sound"), NULL, 0, NULL);
             }
             mciSendString(_T("play sound"), NULL, 0, NULL);
             sound = 0;
@@ -158,6 +178,7 @@ int main()
 
         if (_kbhit()) {
             char ch = _getch();
+            std::cout << toascii(ch) << std::endl;
             if (ch == 26) {                                                 // Ctrl+Z ~ rollback
                 if (history.size() == 1) continue;
                 history.pop_back();
@@ -167,7 +188,7 @@ int main()
                 std::cout << "Successfully rollback." << std::endl;
             }
             if (ch == 25) {                                                 // Ctrl+Y ~ Sudo
-                std::cout << "Sudone." << std::endl;
+                std::cout << "Sudo Not Available." << std::endl;
             }
             else if (ch == 19) {                                            // Ctrl+S ~ save
                 save = history;
@@ -181,8 +202,9 @@ int main()
                 std::cout << "Board loaded." << std::endl;
             }
             else if (ch == 18) {                                            // Ctrl+R ~ restart
-                board = history[0].first;
-                pieces = history[0].second;
+                board = raw.first;
+                pieces = raw.second;
+                auto start = history.end();
                 history.push_back(std::make_pair(board, pieces));
                 shall_render = true;
                 std::cout << "Restarted." << std::endl;
@@ -190,6 +212,26 @@ int main()
             else if (ch == 27 or ch == 23) {                                // Ctrl+W or Escape ~ exit
                 std::cout << "Exited." << std::endl;
                 break;
+            }
+            else if (ch == 9) {                                             // Ctrl + I ~ Import from clipboard
+                std::string str;
+                str = GetClipboard();
+                std::cout << "str:[" << str << "], Len = " << str.length() << std::endl;
+                if (board.importfrom(str)) {
+                    init();
+                    shall_render = shall_judge = true;
+                    sound = 0;
+                    hold.clear();
+                    save = history;
+                    std::cout << "Imported from clipboard." << std::endl;
+                }
+            }
+            else if (ch == 5) {                                             // Ctrl + E ~ Export to clipboard
+                std::string str = "";
+                for (auto intersection : intersections)
+                    str += board.getsymb(intersection);
+                toClipboard(str);
+                std::cout << "Exported to clipboard." << std::endl;
             }
             continue;
         }
@@ -213,7 +255,7 @@ int main()
                 std::pair<int, int> intersection = std::make_pair(xPos, yPos);
                 if (!ischoosing(mouse, xPos, yPos)) continue;
 
-                Piece tmp_piece = pieces[board.numquery(intersection)];     // piece at target intersection
+                Piece tmp_piece = pieces[board.getid(intersection)];     // piece at target intersection
 
                 if (tmp_piece.name != ' ' and tmp_piece.region == board.turnflag) {     // pick up
                     board.choosings.clear();
@@ -231,10 +273,10 @@ int main()
                     bool capture = false;
                     Piece captured;
 
-                    if (board.chrquery(intersection) != ' ') {
-                        captured = pieces[board.numquery(intersection)];
+                    if (board.getsymb(intersection) != ' ') {
+                        captured = pieces[board.getid(intersection)];
                         capture = true;
-                        pieces.erase(board.numquery(intersection));         // is captured
+                        pieces.erase(board.getid(intersection));         // is captured
                     }
                     pieces[hold.id].setpos(intersection);                   // modify pieces
 
@@ -243,17 +285,18 @@ int main()
                     board.choosings.insert(intersection);                   // modify choosings
 
                     bool in_check = false;                                  // default: this move does NOT lead to be in check
-                    bool face_each = (pieces[5].yPos == pieces[28].yPos);   // default: kings DO face each other, if in same column
+                    bool face_each = (pieces[board.kingid[0]].yPos == pieces[board.kingid[1]].yPos);
+                    // default: kings DO face each other, if in same column
                     for (auto& map : pieces) {
                         Piece& piece = map.second;
                         if (piece.xPos + piece.yPos == 0) continue;
                         // TODO: pieces would somehow mysteriously insert a (0, 0)
-                        if (face_each and (piece.yPos == pieces[5].yPos))
-                            if (pieces[5].xPos < piece.xPos and piece.xPos < pieces[28].xPos)
+                        if (face_each and (piece.yPos == pieces[board.kingid[0]].yPos))
+                            if (pieces[board.kingid[1]].xPos < piece.xPos and piece.xPos < pieces[board.kingid[0]].xPos)
                                 face_each = false;                          // if any piece is between kings => they do NOT face each other.
                         if (piece.region != board.turnflag) {
                             piece.maintain(board);
-                            if (piece.legalmoves.count(pieces[board.turnflag ? 5 : 28].getpos())) {
+                            if (piece.legalmoves.count(pieces[board.kingid[board.turnflag]].getpos())) {
                                 in_check = true;                            // if any enemy piece is checking king => illegal move
                                 break;
                             }
@@ -273,7 +316,7 @@ int main()
                         if (piece.xPos + piece.yPos == 0) continue;
                         if (piece.region == board.turnflag) {
                             piece.maintain(board);
-                            if (piece.legalmoves.count(pieces[board.turnflag ? 28 : 5].getpos())) {
+                            if (piece.legalmoves.count(pieces[board.kingid[!board.turnflag]].getpos())) {
                                 check = true;
                                 break;
                             }
@@ -312,11 +355,11 @@ int main()
                     history.push_back(std::make_pair(board, pieces));       // add to history
                 }
             }
+
             else continue;
         }
     }
 
-    pieces[5].name = pieces[28].name = 'M';
     render();
     FlushBatchDraw();
     std::cout << "  Press any key to exit." << std::endl;

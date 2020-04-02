@@ -152,6 +152,7 @@
     <ClCompile Include="util.cpp" />
     <ClCompile Include="paint.cpp" />
     <ClCompile Include="BoardStatus.cpp" />
+    <ClCompile Include="clipboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardStatus.h" />
@@ -159,13 +160,17 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="paint.h" />
+    <ClInclude Include="clipboard.h" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="SE\CAPTURE.WAV" />
-    <Media Include="SE\CHECK.WAV" />
-    <Media Include="SE\CLICK.WAV" />
-    <Media Include="SE\ILLEGAL.WAV" />
-    <Media Include="SE\MOVE.WAV" />
+    <Media Include="SE\CAPTURE.wav" />
+    <Media Include="SE\CHECK.wav" />
+    <Media Include="SE\CHECK_.WAV" />
+    <Media Include="SE\CLICK.wav" />
+    <Media Include="SE\END_GAME.WAV" />
+    <Media Include="SE\ILLEGAL.wav" />
+    <Media Include="SE\ILLEGAL_.WAV" />
+    <Media Include="SE\MOVE.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
